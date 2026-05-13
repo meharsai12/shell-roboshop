@@ -38,3 +38,6 @@ do
         }]
     }'
 done
+
+
+#This is used for creation of Ec2 instances by using shell scripting and along with thar route53 records will get created 
