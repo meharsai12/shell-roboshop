@@ -10,7 +10,7 @@ N="\e[0m"   #no colour
 LOGS_FOLDER="/var/logs/roshop-logs"
 SCRIPT_NAME=$(echo $0  | cut -d "." -f1 ) 
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-
+SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no creation if not it will create 
 
@@ -74,7 +74,7 @@ npm install
 VALIDATE $? "installing dependencies"
 
 
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/catalogue.service  /etc/systemd/system/catalogue.service
 VALIDATE $? "copying catalogueservice"
 
 systemctl daemon-reload
@@ -87,7 +87,7 @@ systemctl start catalogue
 VALIDATE $? "starting catalogue service"
 
 
-cp  mongodb.repo /etc/yum.repos.d/mongo.repo
+cp  $SCRIPT_DIR/mongodb.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "copying mongodb repo "
 
 
