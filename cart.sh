@@ -40,52 +40,48 @@ VALIDATE(){
 }
 
 dnf module disable nodejs -y
-VALIDATE $? "disabling nodejs"
+VALIDATE $? "diabling the default nodejs"
 
 dnf module enable nodejs:20 -y
-VALIDATE $? "enabling nodejs.20"
+VALIDATE $? "enabling nodejs:20 "
 
 dnf install nodejs -y
-VALIDATE $? "installing nodejs"
+VALIDATE $? "installing the nodejs"
 
 id roboshop
-if [ id -ne 0 ]
+if [ id -ne  0 ]
 then
-  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-  VALIDATE $? "Roboshop user creation "
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+    VALIDATe $? "Roboshop user crteation "
 else
- echo -e "Teh id is alredy there no need to create ...$G SKIPPING ..$N"
- fi
+    echo -e "The user already existed so $G SKIPPING..$N"
+fi
+
+mkdir -p  /app
+VALIDATE $? "creating app directory"
+
+curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip
+VALIDATE $? "Unzipping cart component code"
 
 
- mkdir -p  /app
- VALIDATE $? "Creating app directory"
-
-
-curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip 
-VALIDATE $? "downloading zip file of user component "
-
-
-rm -rf /app/*
 cd /app 
-unzip /tmp/user.zip
- VALIDATE $? "unzipping user component"
+rm -rf /app/*
+unzip /tmp/cart.zip
+VALIDATE $? "unzipping the cart component code"
 
-
- 
 npm install 
-VALIDATE $? "downloading dependencies"
+VALIDATE $? "installing dependencies"
 
-
-cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
-VALIDATE $? "copying user service file"
+cp $SCRIPT_DIR/cart.service  /etc/systemd/system/cart.service
+VALIDATE $? "copying user component service "
 
 systemctl daemon-reload
-VALIDATE $? "daemon reload"
+VALIDATE $? "daemon reload "
 
-systemctl enable user 
-systemctl start user
-VALIDATE $? "enabling and starting the user "
+
+systemctl enable cart 
+systemctl start cart
+VALIDATE $? "enabling and starting the cart service"
 
 
 
