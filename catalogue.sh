@@ -46,7 +46,7 @@ dnf module enable nodejs:20 -y
 VALIDATE $? "enabling nodejs-20"
 
 dnf install nodejs -y
-VALIDATE "installing nodejs"
+VALIDATE $? "installing nodejs"
 
 id roboshop
 if [ $? -ne 0 ]
