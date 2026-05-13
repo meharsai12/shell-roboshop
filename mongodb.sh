@@ -1,15 +1,15 @@
 #!/bin/bash
 
-USERID = $(id -u)
+USERID=$(id -u)
 
 R="\e[31m"  #red colour
 G="\e[32m"  #green colour
 Y="\e[33m"  #yellow colour
 N="\e[0m"   #no colour
 
-LOGS_FOLDER ="/var/logs/roshop-logs"
-SCRIPT_NAME =$(echo $0  | cut -d "." -f1 ) 
-LOG_FILE = "$LOGS_FOLDER/$SCRIPT_NAME.log"
+LOGS_FOLDER="/var/logs/roshop-logs"
+SCRIPT_NAME=$(echo $0  | cut -d "." -f1 ) 
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
 
 mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no creation if not it will create 
