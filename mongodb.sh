@@ -26,3 +26,34 @@ mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no
   echo -e " You have root access $G you can perform actions $N"
 
   fi
+
+# instaed of validating  eeach time it takes exit status of previous command  as input and validated each time where we require it and use it
+VALIDATE(){
+    if [ $1 -eq 0 ]
+    then 
+    echo  -e "$2  is :: ... $G  success  $N"
+    else
+    echo -e  "$2 .. ::  $R is failure  $N  "
+    exit 1
+
+    fi
+}
+
+cp  mongodb.repo /etc/yum.repos.d/mongo.repo
+VALIDATE $? "copying mongodb repo "
+
+dnf install mongodb-org -y 
+VALIDATE $? "installing mongodb"
+
+systemctl enable mongod
+VALIDATE $? "enabling mongodb"
+
+systemctl start mongod 
+VALIDATE $? "starting mongodb"
+
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+VALIDATE $? "Editing MongoDB conf file for remote connections"
+
+systemctl restart mongod
+VALIDATE $? "restaring  mongodb"
+
