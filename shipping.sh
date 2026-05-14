@@ -100,3 +100,6 @@ else
 fi
 
 
+systemctl restart shipping
+VALIDATE $? "Restarting shipping"
+
