@@ -10,6 +10,7 @@ N="\e[0m"   #no colour
 LOGS_FOLDER="/var/logs/roshop-logs"
 SCRIPT_NAME=$(echo $0  | cut -d "." -f1 ) 
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
+START_TIME=$(date +%s)
 
 
 mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no creation if not it will create 
