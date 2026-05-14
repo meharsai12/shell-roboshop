@@ -58,3 +58,12 @@ VALIDATE $? "Editing MongoDB conf file for remote connections"
 systemctl restart mongod
 VALIDATE $? "restaring  mongodb"
 
+
+END_TIME=$(date +%s)
+
+TOTAL_TIME=$(($START_TIME - $END_TIME))
+
+echo -e "Total time taken to execute the script is $R $TOTAL_TIME seconds $N "
+
+
+
