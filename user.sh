@@ -11,6 +11,7 @@ LOGS_FOLDER="/var/logs/roshop-logs"
 SCRIPT_NAME=$(echo $0  | cut -d "." -f1 ) 
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 SCRIPT_DIR=$PWD
+START_TIME=$(date +%s)
 
 mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no creation if not it will create 
 
@@ -86,6 +87,12 @@ VALIDATE $? "daemon reload"
 systemctl enable user 
 systemctl start user
 VALIDATE $? "enabling and starting the user "
+
+END_TIME=$(date +%s)
+
+TOTAL_TIME=$(($START_TIME - $END_TIME))
+
+echo -e "Total time taken to execute the script is $R $TOTAL_TIME seconds $N "
 
 
 

@@ -13,7 +13,7 @@ START_TIME=$(date +%s)
 
 mkdir -p $LOGS_FOLDER 
 
-echo -e "Script executed at .. ::  $G $(date) $N"  | tee -a $LOG_FILE| tee -a $LOG_FILE
+echo -e "Script executed at .. ::  $G $(date) $N"  | tee -a $LOG_FILE
 
 
 if [ USERID -ne 0 ]
