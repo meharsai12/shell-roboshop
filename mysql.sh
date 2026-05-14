@@ -53,3 +53,9 @@ VALIDATE $? "enabling and starting the mysql server"
 
 mysql_secure_installation --set-root-pass $MYSQL_ROOT_PASSWORD   &>>$LOG_FILE
 VALIDATE $? "Setting MySQL root password"
+
+END_TIME=$(date +%s)
+
+TOTAL_TIME=$(($START_TIME - $END_TIME))
+
+echo -e "Total time taken to execute the script is $R $TOTAL_TIME seconds $N "
