@@ -15,16 +15,16 @@ START_TIME=$(date +%s)
 
 mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no creation if not it will create 
 
- echo "Script started  Executing at time ::  $(date)"
+ echo "Script started  Executing at time ::  $(date)"  | tee -a $LOG_FILE
 
 
  if [ $USERID -ne 0 ]
  then 
-  echo  -e " You don't have root access ,  $R Please run the script with root access $N "
+  echo  -e " You don't have root access ,  $R Please run the script with root access $N "  | tee -a $LOG_FILE
   exit 1
  else
 
-  echo -e " You have root access $G you can perform actions $N"
+  echo -e " You have root access $G you can perform actions $N"   | tee -a $LOG_FILE
 
   fi
 
@@ -32,9 +32,9 @@ mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no
 VALIDATE(){
     if [ $1 -eq 0 ]
     then 
-    echo  -e "$2  is :: ... $G  success  $N"
+    echo  -e "$2  is :: ... $G  success  $N"  | tee -a $LOG_FILE
     else
-    echo -e  "$2 .. ::  $R is failure  $N  "
+    echo -e  "$2 .. ::  $R is failure  $N  "  | tee -a $LOG_FILE
     exit 1
 
     fi
@@ -43,19 +43,19 @@ VALIDATE(){
 cp  mongodb.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "copying mongodb repo "
 
-dnf install mongodb-org -y 
+dnf install mongodb-org -y  &>>$LOG_FILE
 VALIDATE $? "installing mongodb"
 
-systemctl enable mongod
+systemctl enable mongod  &>>$LOG_FILE
 VALIDATE $? "enabling mongodb"
-
-systemctl start mongod 
+ 
+systemctl start mongod   &>>$LOG_FILE
 VALIDATE $? "starting mongodb"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf  &>>$LOG_FILE
 VALIDATE $? "Editing MongoDB conf file for remote connections"
 
-systemctl restart mongod
+systemctl restart mongod  &>>$LOG_FILE
 VALIDATE $? "restaring  mongodb"
 
 
