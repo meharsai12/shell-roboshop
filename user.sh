@@ -15,77 +15,81 @@ START_TIME=$(date +%s)
 
 mkdir -p $LOGS_FOLDER    # if we add -p if we run n times ifd folder ewxistis no creation if not it will create 
 
- echo "Script started  Executing at time ::  $(date)"
+ echo "Script started  Executing at time ::  $(date)"  | tee -a $LOG_FILE
+
 
 
  if [ $USERID -ne 0 ]
  then 
-  echo  -e " You don't have root access ,  $R Please run the script with root access $N "
+  echo  -e " You don't have root access ,  $R Please run the script with root access $N "   | tee -a $LOG_FILE
+
   exit 1
  else
 
-  echo -e " You have root access $G you can perform actions $N"
+  echo -e " You have root access $G you can perform actions $N"   | tee -a $LOG_FILE
 
-  fi
+fi
 
 # instaed of validating  eeach time it takes exit status of previous command  as input and validated each time where we require it and use it
 VALIDATE(){
     if [ $1 -eq 0 ]
     then 
-    echo  -e "$2  is :: ... $G  success  $N"
+    echo  -e "$2  is :: ... $G  success  $N"  | tee -a $LOG_FILE
+
     else
-    echo -e  "$2 .. ::  $R is failure  $N  "
+    echo -e  "$2 .. ::  $R is failure  $N  "   | tee -a $LOG_FILE
+
     exit 1
 
     fi
 }
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y   &>>$LOG_FILE
 VALIDATE $? "disabling nodejs"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y   &>>$LOG_FILE
 VALIDATE $? "enabling nodejs.20"
 
-dnf install nodejs -y
+dnf install nodejs -y   &>>$LOG_FILE
 VALIDATE $? "installing nodejs"
 
 id roboshop
 if [ id -ne 0 ]
 then
-  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop   &>>$LOG_FILE
   VALIDATE $? "Roboshop user creation "
 else
  echo -e "Teh id is alredy there no need to create ...$G SKIPPING ..$N"
  fi
 
 
- mkdir -p  /app
+ mkdir -p  /app   &>>$LOG_FILE
  VALIDATE $? "Creating app directory"
 
 
-curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip 
+curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip    &>>$LOG_FILE
 VALIDATE $? "downloading zip file of user component "
 
 
-rm -rf /app/*
-cd /app 
-unzip /tmp/user.zip
+rm -rf /app/*   &>>$LOG_FILE
+cd /app    &>>$LOG_FILE
+unzip /tmp/user.zip   &>>$LOG_FILE
  VALIDATE $? "unzipping user component"
 
 
  
-npm install 
+npm install    &>>$LOG_FILE
 VALIDATE $? "downloading dependencies"
 
 
-cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
+cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service   &>>$LOG_FILE
 VALIDATE $? "copying user service file"
 
-systemctl daemon-reload
+systemctl daemon-reload   &>>$LOG_FILE
 VALIDATE $? "daemon reload"
 
-systemctl enable user 
-systemctl start user
+systemctl enable user    &>>$LOG_FILE
+systemctl start user     &>>$LOG_FILE
 VALIDATE $? "enabling and starting the user "
 
 END_TIME=$(date +%s)
