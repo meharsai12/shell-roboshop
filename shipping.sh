@@ -52,7 +52,7 @@ VALIDATE $? "installing  maven"
 
 
 id roboshop
-if [ id -ne 0 ]
+if [ $? -ne 0 ]
 then 
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE
     VALIDATE $? "Roboshop user creation "
